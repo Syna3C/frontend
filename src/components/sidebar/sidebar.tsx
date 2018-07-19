@@ -11,11 +11,9 @@ export class Sidebar extends React.Component {
       <GrommetSidebar flex={true} justify="between" pad={{ horizontal: 'medium' }} colorIndex="light-2">
         <Menu pad={{ vertical: 'medium', between: 'small' }}>
           <Anchor href="/events">Events</Anchor>
-          <Anchor href="/login">Login</Anchor>
-          <Anchor href="/sign-up">Sign up</Anchor>
         </Menu>
         <Footer>
-          Syna3C
+          TODO: This sidebar should be visible only when the user is logged in.
         </Footer>
       </GrommetSidebar>
     );

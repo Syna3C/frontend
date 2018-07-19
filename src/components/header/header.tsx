@@ -11,8 +11,7 @@ export class Header extends React.Component {
         <Title>Syna3C</Title>
         <Menu inline={true} direction="row">
           <Link to="/events">Events</Link>
-          <Link to="/login">Login</Link>
-          <Link to="/sign-up">Sign up</Link>
+          <Link to="/login">Login/Sign up</Link>
         </Menu>
       </GrommetHeader>
     );

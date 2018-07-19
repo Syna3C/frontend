@@ -9,9 +9,9 @@ import './app.css';
 import { Footer } from './components/footer/footer';
 import { Header } from './components/header/header';
 import { Sidebar } from './components/sidebar/sidebar';
+import { EventDetail } from './pages/event-detail/event-detail';
 import { Events } from './pages/events/events';
 import { Login } from './pages/login/login';
-import { SignUp } from './pages/sign-up/sign-up';
 
 export class App extends React.Component {
 
@@ -20,12 +20,12 @@ export class App extends React.Component {
       <AppContainer centered={false}>
         <Split flex="right">
           <Sidebar />
-          <Box flex={true} justify="between">
+          <Box className="site" flex={true} justify="between">
             <Header />
-            <Box pad={{ horizontal: 'medium', vertical: 'medium' }}>
+            <Box className="site-content" pad={{ horizontal: 'medium', vertical: 'medium' }}>
+              <Route path="/event/:eventId" component={EventDetail} />
               <Route path="/events" component={Events} />
               <Route path="/login" component={Login} />
-              <Route path="/sign-up" component={SignUp} />
             </Box>
             <Footer />
           </Box>
