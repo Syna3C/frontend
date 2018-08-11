@@ -6,13 +6,14 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 
 import { ApiConstants } from "../../constants/api";
 import { IState } from "../../interfaces/IState";
-import { ILoginResponse } from "../../interfaces/responses/ILoginResponse";
+import { IAuthResponse } from "../../interfaces/responses/IAuthResponse";
 import { UserActions } from "./UserActions";
-import { IUserActions, UserActionType, UserLoginError } from "./UserTypes";
+import { IUserActions, UserActionType, UserLoginError, UserSignUpError } from "./UserTypes";
 
 export class UserEpics {
   public static ALL = combineEpics(
-    UserEpics.loginUser as Epic<AnyAction, AnyAction, IState, AjaxCreationMethod>
+    UserEpics.loginUser as Epic<AnyAction, AnyAction, IState, AjaxCreationMethod>,
+    UserEpics.signUpUser as Epic<AnyAction, AnyAction, IState, AjaxCreationMethod>
   );
 
   /**
@@ -22,13 +23,27 @@ export class UserEpics {
   public static loginUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { getJSON }: AjaxCreationMethod): Observable<IUserActions> {
     return action$.pipe(
       ofType(UserActionType.LOGIN),
-      mergeMap(() => getJSON<ILoginResponse>(ApiConstants.LOGIN_URL).pipe(
+      mergeMap(() => getJSON<IAuthResponse>(ApiConstants.LOGIN_URL).pipe(
         map(
           loginResponse => UserActions.loginSuccess(loginResponse)
         )
       )),
       catchError((err: AjaxError) => {
         return of(UserActions.loginFailed(err.status === 401 ? UserLoginError.INVALID_USERNAME_OR_PASSWORD : UserLoginError.SERVER_ERROR));
+      })
+    );
+  }
+
+  public static signUpUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { getJSON }: AjaxCreationMethod): Observable<IUserActions> {
+    return action$.pipe(
+      ofType(UserActionType.SIGNUP),
+      mergeMap(() => getJSON<IAuthResponse>(ApiConstants.SIGNUP_URL).pipe(
+        map(
+          signUpResponse => UserActions.signUpSuccess(signUpResponse)
+        )
+      )),
+      catchError((err: AjaxError) => {
+        return of(UserActions.signUpFailed(err.status === 403 ? UserSignUpError.USER_EXISTS : UserSignUpError.SERVER_ERROR));
       })
     );
   }

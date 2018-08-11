@@ -1,29 +1,28 @@
 import { IRolePermissions } from '../interfaces/IRolePermissions';
-import { IUser } from '../interfaces/IUser';
-import { ILoginResponse } from '../interfaces/responses/ILoginResponse';
+import { IUserWithPermissions } from '../interfaces/responses/IUserWithPermissions';
 
-export class User implements IUser {
+export class User implements IUserWithPermissions {
 
   private _username: string;
-  private _id: number;
+  private _userId: number;
   private _email: string;
   private _firstName: string;
   private _lastName: string;
   private _role: string;
   private _permissions: IRolePermissions;
 
-  constructor(json: ILoginResponse) {
-    this._id = json.UserId;
-    this._username = json.Username;
-    this._email = json.FirstName;
-    this._lastName = json.LastName;
-    this._firstName = json.FirstName;
-    this._role = json.Role;
-    this._permissions = json.Permissions;
+  constructor(json: IUserWithPermissions) {
+    this._userId = json.userId;
+    this._username = json.username;
+    this._email = json.firstName;
+    this._lastName = json.lastName;
+    this._firstName = json.firstName;
+    this._role = json.role;
+    this._permissions = json.permissions;
   }
 
-  public get id(): number {
-    return this._id;
+  public get userId(): number {
+    return this._userId;
   }
 
   public get username(): string {
@@ -46,7 +45,7 @@ export class User implements IUser {
     return this._role;
   }
 
-  public get permission(): IRolePermissions {
+  public get permissions(): IRolePermissions {
     return this._permissions;
   }
 }

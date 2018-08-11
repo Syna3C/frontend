@@ -1,5 +1,5 @@
-import { ILoginResponse } from '../../interfaces/responses/ILoginResponse';
-import { ILoginAction, ILoginFailedAction, ILoginSuccessAction, UserActionType, UserLoginError } from './UserTypes';
+import { IAuthResponse } from '../../interfaces/responses/IAuthResponse';
+import { ILoginAction, ILoginFailedAction, ILoginSuccessAction, ISignUpAction, ISignUpFailedAction, ISignUpSuccessAction, UserActionType, UserLoginError, UserSignUpError } from './UserTypes';
 
 export class UserActions {
 
@@ -8,7 +8,7 @@ export class UserActions {
    *
    * @param formData The username and password from the login form
    */
-  public static loginUser(formData: { username: string; password: string; rememberMe?: boolean }): ILoginAction {
+  public static login(formData: { username: string; password: string; rememberMe?: boolean }): ILoginAction {
     return {
       payload: formData,
       type: UserActionType.LOGIN
@@ -21,7 +21,7 @@ export class UserActions {
    *
    * @param loginResponse The JSON response of the login network request
    */
-  public static loginSuccess(loginResponse: ILoginResponse): ILoginSuccessAction {
+  public static loginSuccess(loginResponse: IAuthResponse): ILoginSuccessAction {
     return {
       payload: loginResponse,
       type: UserActionType.LOGIN_SUCCESS
@@ -33,12 +33,35 @@ export class UserActions {
    *
    * @param error The type of error (UserLoginError enum)
    */
-  public static loginFailed(error: UserLoginError): ILoginFailedAction {
+  public static loginFailed(...error: UserLoginError[]): ILoginFailedAction {
     return {
       payload: {
         error
       },
       type: UserActionType.LOGIN_FAILED,
     };
+  }
+
+  public static signUp(formData: { username: string; email: string; password: string }): ISignUpAction {
+    return {
+      payload: formData,
+      type: UserActionType.SIGNUP
+    };
+  }
+
+  public static signUpSuccess(signUpResponse: IAuthResponse): ISignUpSuccessAction {
+    return {
+      payload: signUpResponse,
+      type: UserActionType.SIGNUP_SUCCESS
+    }
+  }
+
+  public static signUpFailed(...errors: UserSignUpError[]): ISignUpFailedAction {
+    return {
+      payload: {
+        error: errors
+      },
+      type: UserActionType.SIGNUP_FAILED
+    }
   }
 }

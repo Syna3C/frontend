@@ -7,11 +7,18 @@ import { DEFAULT_USER_STATE, IUserActions, UserActionType } from './UserTypes';
 export const userReducer: Reducer<IUserState> = (state: IUserState = DEFAULT_USER_STATE, action: IUserActions) => {
   switch (action.type) {
     case UserActionType.LOGIN:
-      return { ...state, isLoginInProgress: true };
+      return { ...state, isLoginInProgress: true, loginErrors: [] };
     case UserActionType.LOGIN_SUCCESS:
-      return { ...state, isLoggedIn: true, isLoginInProgress: false, user: new User(action.payload), loginError: undefined };
+      return { ...state, isLoggedIn: true, isLoginInProgress: false, user: new User(action.payload.user), token: action.payload.token, loginErrors: [] };
     case UserActionType.LOGIN_FAILED:
-      return { ...state, isLoggedIn: false, isLoginInProgress: false, user: undefined, loginError: action.payload.error };
+      return { ...state, isLoggedIn: false, isLoginInProgress: false, user: undefined, loginErrors: action.payload.error };
+
+    case UserActionType.SIGNUP:
+      return { ...state, isSignUpInProgress: true, signUpErrors: [] };
+    case UserActionType.SIGNUP_SUCCESS:
+      return { ...state, isLoggedIn: true, isSignUpInProgress: false, user: new User(action.payload.user), token: action.payload.token, signUpErrors: [] };
+    case UserActionType.SIGNUP_FAILED:
+      return { ...state, isLoggedIn: false, isSignUpInProgress: false, user: undefined, signUpErrors: action.payload.error };
     default:
       return state;
   }
