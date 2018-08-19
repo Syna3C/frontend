@@ -20,12 +20,12 @@ export class UserEpics {
    * Makes a network request to the login endpoint, initiating the login success action
    * or the login failed action appropriately.
    */
-  public static loginUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { getJSON }: AjaxCreationMethod): Observable<IUserActions> {
+  public static loginUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { post }: AjaxCreationMethod): Observable<IUserActions> {
     return action$.pipe(
       ofType(UserActionType.LOGIN),
-      mergeMap(() => getJSON<IAuthResponse>(ApiConstants.LOGIN_URL).pipe(
+      mergeMap(userAction => post(ApiConstants.LOGIN_URL, userAction.payload).pipe(
         map(
-          loginResponse => UserActions.loginSuccess(loginResponse)
+          (loginResponse: { response: IAuthResponse }) => UserActions.loginSuccess(loginResponse.response)
         )
       )),
       catchError((err: AjaxError) => {
@@ -34,12 +34,12 @@ export class UserEpics {
     );
   }
 
-  public static signUpUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { getJSON }: AjaxCreationMethod): Observable<IUserActions> {
+  public static signUpUser(action$: ActionsObservable<IUserActions>, state$: StateObservable<IState>, { post }: AjaxCreationMethod): Observable<IUserActions> {
     return action$.pipe(
       ofType(UserActionType.SIGNUP),
-      mergeMap(() => getJSON<IAuthResponse>(ApiConstants.SIGNUP_URL).pipe(
+      mergeMap(userAction => post(ApiConstants.SIGNUP_URL, userAction.payload).pipe(
         map(
-          signUpResponse => UserActions.signUpSuccess(signUpResponse)
+          (signUpResponse: { response: IAuthResponse }) => UserActions.signUpSuccess(signUpResponse.response)
         )
       )),
       catchError((err: AjaxError) => {

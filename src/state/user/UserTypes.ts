@@ -24,7 +24,7 @@ export enum UserLoginError {
 export interface ILoginAction extends Action {
   type: UserActionType.LOGIN,
   payload: {
-    username: string;
+    email: string;
     password: string;
     rememberMe?: boolean;
   }

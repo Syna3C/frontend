@@ -8,7 +8,7 @@ export class UserActions {
    *
    * @param formData The username and password from the login form
    */
-  public static login(formData: { username: string; password: string; rememberMe?: boolean }): ILoginAction {
+  public static login(formData: { email: string; password: string; rememberMe?: boolean }): ILoginAction {
     return {
       payload: formData,
       type: UserActionType.LOGIN

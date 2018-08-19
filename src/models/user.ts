@@ -17,7 +17,6 @@ export class User implements IUserWithPermissions {
     this._email = json.firstName;
     this._lastName = json.lastName;
     this._firstName = json.firstName;
-    this._role = json.role;
     this._permissions = json.permissions;
   }
 

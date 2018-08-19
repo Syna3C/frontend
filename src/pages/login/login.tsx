@@ -147,7 +147,11 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
     if (loginErrors.length) {
       this.props.loginFailed(...loginErrors);
     } else {
-      this.props.login(formData);
+      this.props.login({
+        email: formData.username,
+        password: formData.password,
+        rememberMe: formData.rememberMe
+      });
     }
   }
 

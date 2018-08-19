@@ -19,7 +19,8 @@ function configureStore(initialState: IState) {
 
   const epicMiddleware = createEpicMiddleware({
     dependencies: {
-      getJSON: ajax.getJSON
+      getJSON: ajax.getJSON,
+      post: ajax.post
     }
   });
 
