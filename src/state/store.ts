@@ -3,18 +3,24 @@ import { combineEpics, createEpicMiddleware, Epic } from 'redux-observable';
 import { ajax } from 'rxjs/ajax';
 
 import { IState } from '../interfaces/IState';
+import { EventEpics } from './event/EventEpics'
+import { eventReducer } from './event/EventReducer';
+import { DEFAULT_EVENT_STATE } from './event/EventTypes';
 import { UserEpics } from './user/UserEpics';
 import { userReducer } from './user/UserReducer';
 import { DEFAULT_USER_STATE } from './user/UserTypes';
 
+
 const DEFAULT_STATE: IState = {
-  userState: DEFAULT_USER_STATE
+  eventState: DEFAULT_EVENT_STATE,
+  userState: DEFAULT_USER_STATE,
 };
 
 function configureStore(initialState: IState) {
   // configure middlewares
   const rootEpic = combineEpics(
-    UserEpics.ALL as Epic<any>
+    UserEpics.ALL as Epic<any>,
+    EventEpics.ALL as Epic<any>
   );
 
   const epicMiddleware = createEpicMiddleware({
@@ -32,7 +38,8 @@ function configureStore(initialState: IState) {
   }
 
   const rootReducer = combineReducers<IState>({
-    userState: userReducer
+    eventState: eventReducer,
+    userState: userReducer,
   });
 
   // compose enhancers

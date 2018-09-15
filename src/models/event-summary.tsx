@@ -1,28 +1,28 @@
 export class EventSummary {
 
   private readonly _description: string;
-  private readonly _id: number;
-  private readonly _title: string;
+  private readonly _eventId: number;
+  private readonly _name: string;
 
   public constructor(eventJSON: any) {
     if (!eventJSON) {
       return;
     }
 
-    this._title = eventJSON.title;
+    this._name = eventJSON.name;
     this._description = eventJSON.description;
-    this._id = eventJSON.id;
+    this._eventId = eventJSON.eventId;
   }
 
-  public get title(): string {
-    return this._title;
+  public get name(): string {
+    return this._name;
   }
 
   public get description(): string {
     return this._description;
   }
 
-  public get id(): number {
-    return this._id;
+  public get eventId(): number {
+    return this._eventId;
   }
 }

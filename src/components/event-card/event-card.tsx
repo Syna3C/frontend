@@ -10,10 +10,10 @@ interface IEventCardProps extends React.ClassAttributes<EventCard> {
 export class EventCard extends React.PureComponent<IEventCardProps, void> {
 
   public render() {
-    const eventLink = `/event/${this.props.event.id}`;
+    const eventLink = `/event/${this.props.event.eventId}`;
 
     return (
-      <Card full="horizontal" key={this.props.event.id} heading={this.props.event.title} description={this.props.event.description} link={<Anchor href={eventLink} label="Read more" />} textSize="small" />
+      <Card full="horizontal" key={this.props.event.eventId} heading={this.props.event.name} description={this.props.event.description} link={<Anchor href={eventLink} label="Read more" />} textSize="small" />
     );
   }
 }
