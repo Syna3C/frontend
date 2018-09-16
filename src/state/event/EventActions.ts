@@ -1,17 +1,21 @@
+import { AppConstants } from '../../constants/app';
 import { IEventResponse } from '../../interfaces/responses/IEventResponse';
-import { EventActionType, EventError,IEventAction ,IEventFailedAction,  IEventSuccessAction} from './EventTypes';
+import { EventActionType, EventError, IEventsFailedAction, IEventsSuccessAction, IGetEventsAction } from './EventTypes';
 
 export class EventActions {
 
   /**
    * pull event feed data from the database
    */
-  public static getEvent() : IEventAction{
+  public static getEvents(pageNum: number = 1, pageSize: number = AppConstants.DEFAULT_PAGE_SIZE): IGetEventsAction {
     console.log("event action")
     return {
-      payload: 'test',
-      type: EventActionType.GET_EVENT
-    } 
+      payload: {
+        pageNum,
+        pageSize
+      },
+      type: EventActionType.GET_EVENTS
+    }
   }
   /**
    * Create a new successful login action with the response of the login network request
@@ -19,10 +23,10 @@ export class EventActions {
    * @param eventResponse The JSON response of the event request
    *
    */
-  public static getEventSuccess(eventResponse: IEventResponse): IEventSuccessAction {
+  public static getEventsSuccess(eventResponse: IEventResponse): IEventsSuccessAction {
     return {
       payload: eventResponse,
-      type: EventActionType.GET_EVENT_SUCCESS
+      type: EventActionType.GET_EVENTS_SUCCESS
     }
   }
   /**
@@ -30,12 +34,12 @@ export class EventActions {
    *
    * @param error The type of error (EventError enum)
    */
-  public static getEventFailed(...error: EventError[]): IEventFailedAction {
+  public static getEventsFailed(...error: EventError[]): IEventsFailedAction {
     return {
       payload: {
         error
       },
-      type: EventActionType.GET_EVENT_FAILED,
+      type: EventActionType.GET_EVENTS_FAILED,
     };
   }
 }

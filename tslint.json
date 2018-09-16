@@ -1,8 +1,17 @@
 {
   "extends": [
-
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier"
   ],
   "rules": {
+    "no-default-export": true,
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "allow-leading-underscore"
+    ],
+    "no-console": false
   },
   "linterOptions": {
     "exclude": [

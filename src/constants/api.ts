@@ -5,4 +5,7 @@ export class ApiConstants {
   // Users
   public static LOGIN_URL = `${ApiConstants.API_URL}/login`;
   public static SIGNUP_URL = `${ApiConstants.API_URL}/signUp`;
+
+  // Events
+  public static GET_EVENTS_URL = `${ApiConstants.API_URL}/events`;
 }

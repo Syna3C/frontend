@@ -5,35 +5,37 @@ import { Action } from 'redux';
 import { IEventResponse } from '../../interfaces/responses/IEventResponse';
 
 export enum EventActionType {
-  GET_EVENT = 'getEvent',
-  GET_EVENT_FAILED = 'getEvent_failed',
-  GET_EVENT_SUCCESS = 'getEvent_success',
+  GET_EVENTS = 'getEvents',
+  GET_EVENTS_FAILED = 'getEvents_failed',
+  GET_EVENTS_SUCCESS = 'getEvents_success',
 };
 
 export enum EventError {
   SERVER_ERROR
 };
 
-export interface IEventAction extends Action {
-  payload: string,
-  type: EventActionType.GET_EVENT
+export interface IGetEventsAction extends Action {
+  payload: {
+    pageSize: number;
+    pageNum: number;
+  },
+  type: EventActionType.GET_EVENTS
 }
 
-export interface IEventSuccessAction extends Action {
-  type: EventActionType.GET_EVENT_SUCCESS,
+export interface IEventsSuccessAction extends Action {
+  type: EventActionType.GET_EVENTS_SUCCESS,
   payload: IEventResponse
 }
 
-export interface IEventFailedAction extends Action {
-  type: EventActionType.GET_EVENT_FAILED,
+export interface IEventsFailedAction extends Action {
+  type: EventActionType.GET_EVENTS_FAILED,
   payload: {
     error: EventError[]
   }
 }
 
 export const DEFAULT_EVENT_STATE: IEventState = {
-  isActive: false,
-  isActiveInProgress: false
+  isEventsRequestInProgress: false
 };
 
-export type IEventActions = IEventAction | IEventSuccessAction | IEventFailedAction;
+export type IEventActions = IGetEventsAction | IEventsSuccessAction | IEventsFailedAction;

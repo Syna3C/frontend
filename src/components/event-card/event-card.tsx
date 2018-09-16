@@ -1,13 +1,13 @@
 import Anchor from 'grommet/components/Anchor';
 import Card from 'grommet/components/Card';
 import * as React from 'react';
-import { EventSummary } from '../../models/event-summary';
+import { Event } from '../../models/event';
 
 interface IEventCardProps extends React.ClassAttributes<EventCard> {
-  event: EventSummary;
+  event: Event;
 }
 
-export class EventCard extends React.PureComponent<IEventCardProps, void> {
+export class EventCard extends React.PureComponent<IEventCardProps> {
 
   public render() {
     const eventLink = `/event/${this.props.event.eventId}`;
