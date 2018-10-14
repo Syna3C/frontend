@@ -3,6 +3,7 @@ import { UserLoginError, UserSignUpError } from '../state/user/UserTypes';
 export interface IUserState {
   user?: User;
   isLoggedIn: boolean;
+  rememberMe: boolean;
   isLoginInProgress: boolean;
   isSignUpInProgress: boolean;
   loginErrors?: UserLoginError[];

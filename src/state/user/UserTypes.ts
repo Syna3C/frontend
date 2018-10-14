@@ -1,12 +1,13 @@
 import { IUserState } from '../../interfaces/IUserState';
 
-import { Action } from 'redux';
+import { IAction } from '../../interfaces/IAction';
 import { IAuthResponse } from '../../interfaces/responses/IAuthResponse';
 
 export enum UserActionType {
   LOGIN = 'login',
   LOGIN_FAILED = 'login_failed',
   LOGIN_SUCCESS = 'login_success',
+  LOGOUT = 'logout',
   SIGNUP = 'signup',
   SIGNUP_FAILED = 'signup_failed',
   SIGNUP_SUCCESS = 'signup_success'
@@ -21,25 +22,32 @@ export enum UserLoginError {
   SERVER_ERROR
 };
 
-export interface ILoginAction extends Action {
+export interface ILoginAction extends IAction {
   type: UserActionType.LOGIN,
   payload: {
     email: string;
     password: string;
-    rememberMe?: boolean;
+    rememberMe: boolean;
   }
 }
 
-export interface ILoginSuccessAction extends Action {
+export interface ILoginSuccessAction extends IAction {
   type: UserActionType.LOGIN_SUCCESS,
-  payload: IAuthResponse
+  payload: {
+    response: IAuthResponse,
+    rememberMe: boolean
+  }
 }
 
-export interface ILoginFailedAction extends Action {
+export interface ILoginFailedAction extends IAction {
   type: UserActionType.LOGIN_FAILED,
   payload: {
     error: UserLoginError[]
   }
+}
+
+export interface ILogoutAction extends IAction {
+  type: UserActionType.LOGOUT
 }
 
 export enum UserSignUpError {
@@ -53,7 +61,7 @@ export enum UserSignUpError {
   SERVER_ERROR
 }
 
-export interface ISignUpAction extends Action {
+export interface ISignUpAction extends IAction {
   type: UserActionType.SIGNUP,
   payload: {
     username: string;
@@ -62,12 +70,12 @@ export interface ISignUpAction extends Action {
   }
 }
 
-export interface ISignUpSuccessAction extends Action {
+export interface ISignUpSuccessAction extends IAction {
   type: UserActionType.SIGNUP_SUCCESS,
   payload: IAuthResponse
 }
 
-export interface ISignUpFailedAction extends Action {
+export interface ISignUpFailedAction extends IAction {
   type: UserActionType.SIGNUP_FAILED,
   payload: {
     error: UserSignUpError[];
@@ -77,8 +85,9 @@ export interface ISignUpFailedAction extends Action {
 export const DEFAULT_USER_STATE: IUserState = {
   isLoggedIn: false,
   isLoginInProgress: false,
-  isSignUpInProgress: false
+  isSignUpInProgress: false,
+  rememberMe: false
 };
 
-export type IUserActions = ILoginAction | ILoginSuccessAction | ILoginFailedAction
+export type IUserActions = ILoginAction | ILoginSuccessAction | ILoginFailedAction | ILogoutAction
   | ISignUpAction | ISignUpSuccessAction | ISignUpFailedAction;

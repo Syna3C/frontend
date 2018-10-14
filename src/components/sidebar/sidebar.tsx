@@ -13,7 +13,7 @@ export class Sidebar extends React.Component {
           <Anchor href="/events">Events</Anchor>
         </Menu>
         <Footer>
-          TODO: This sidebar should be visible only when the user is logged in.
+          Syna3C
         </Footer>
       </GrommetSidebar>
     );

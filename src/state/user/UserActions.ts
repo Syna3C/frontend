@@ -1,5 +1,5 @@
 import { IAuthResponse } from '../../interfaces/responses/IAuthResponse';
-import { ILoginAction, ILoginFailedAction, ILoginSuccessAction, ISignUpAction, ISignUpFailedAction, ISignUpSuccessAction, UserActionType, UserLoginError, UserSignUpError } from './UserTypes';
+import { ILoginAction, ILoginFailedAction, ILoginSuccessAction, ILogoutAction, ISignUpAction, ISignUpFailedAction, ISignUpSuccessAction, UserActionType, UserLoginError, UserSignUpError } from './UserTypes';
 
 export class UserActions {
 
@@ -8,7 +8,7 @@ export class UserActions {
    *
    * @param formData The username and password from the login form
    */
-  public static login(formData: { email: string; password: string; rememberMe?: boolean }): ILoginAction {
+  public static login(formData: { email: string; password: string; rememberMe: boolean }): ILoginAction {
     return {
       payload: formData,
       type: UserActionType.LOGIN
@@ -21,9 +21,13 @@ export class UserActions {
    *
    * @param loginResponse The JSON response of the login network request
    */
-  public static loginSuccess(loginResponse: IAuthResponse): ILoginSuccessAction {
+  public static loginSuccess(loginResponse: IAuthResponse, rememberMe: boolean): ILoginSuccessAction {
     return {
-      payload: loginResponse,
+      payload: {
+        rememberMe,
+        response: loginResponse
+      },
+      persistState: true,
       type: UserActionType.LOGIN_SUCCESS
     }
   }
@@ -42,6 +46,12 @@ export class UserActions {
     };
   }
 
+  public static logout(): ILogoutAction {
+    return {
+      type: UserActionType.LOGOUT
+    }
+  }
+
   public static signUp(formData: { username: string; email: string; password: string }): ISignUpAction {
     return {
       payload: formData,
@@ -52,6 +62,7 @@ export class UserActions {
   public static signUpSuccess(signUpResponse: IAuthResponse): ISignUpSuccessAction {
     return {
       payload: signUpResponse,
+      persistState: true,
       type: UserActionType.SIGNUP_SUCCESS
     }
   }

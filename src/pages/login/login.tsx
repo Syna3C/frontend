@@ -41,11 +41,24 @@ interface ILoginState {
 class LoginComponent extends React.Component<ILoginProps, ILoginState> {
 
   private static SIGNUP_FIELDS = ["signUpEmail", "signUpPassword", "signUpUsername"];
+  private static DEFAULT_REDIRECT_URL = '/'
+
+  private static REDIRECT_QUERY_PARAM = 'redirect'
+
+  private static MIN_EMAIL_LENGTH = 4
+  private static MIN_PASSWORD_LENGTH = 6
+  private static MIN_USERNAME_LENGTH = 4
+
+  public state = {
+    signUpEmail: "",
+    signUpPassword: "",
+    signUpUsername: ""
+  };
 
   constructor(props: ILoginProps) {
     super(props);
     if (props.isLoggedIn) {
-      props.history.replace('/dashboard');
+      props.history.replace(LoginComponent.DEFAULT_REDIRECT_URL);
       return;
     }
 
@@ -54,12 +67,14 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
     this.validateLoginForm = this.validateLoginForm.bind(this);
     this.validateSignUpForm = this.validateSignUpForm.bind(this);
     this.changeSignUpField = this.changeSignUpField.bind(this);
+  }
 
-    this.state = {
-      signUpEmail: "",
-      signUpPassword: "",
-      signUpUsername: ""
-    };
+  public componentDidUpdate() {
+    if (this.props.isLoggedIn) {
+      const queryParams = new URLSearchParams(this.props.location.search)
+      this.props.history.replace(queryParams.get(LoginComponent.REDIRECT_QUERY_PARAM)
+        || LoginComponent.DEFAULT_REDIRECT_URL)
+    }
   }
 
   public render() {
@@ -71,7 +86,7 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
       <Section justify="center" direction="row">
         <Tabs>
           <Tab title="Login">
-            <LoginForm secondaryText="Login to Syna3C to access your dashboard" onSubmit={this.login} errors={loginErrors} />
+            <LoginForm secondaryText="Login to Syna3C to access your dashboard" onSubmit={this.login} errors={loginErrors} rememberMe={true} />
           </Tab>
           <Tab title="Sign up">
             <Form pad="medium">
@@ -116,7 +131,7 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
       case UserLoginError.PASSWORD_MISSING:
         return 'Enter your password';
       case UserLoginError.PASSWORD_TOO_SHORT:
-        return 'Password is too short';
+        return `Password is too short. Must be at least ${LoginComponent.MIN_PASSWORD_LENGTH} characters.`;
       case UserLoginError.INVALID_USERNAME_OR_PASSWORD:
         return 'Invalid username or password';
       case UserLoginError.SERVER_ERROR:
@@ -129,13 +144,13 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
 
     if (!email || email.trim() === "") {
       validationErrors.push(UserLoginError.EMAIL_MISSING);
-    } else if (email.length < 4) { // TODO: Add email regex verification
+    } else if (email.length < LoginComponent.MIN_EMAIL_LENGTH) { // TODO: Add email regex verification
       validationErrors.push(UserLoginError.INVALID_EMAIL);
     }
 
     if (!password || password.trim() === "") {
       validationErrors.push(UserLoginError.PASSWORD_MISSING);
-    } else if (password.length < 6) {
+    } else if (password.length < LoginComponent.MIN_PASSWORD_LENGTH) {
       validationErrors.push(UserLoginError.PASSWORD_TOO_SHORT);
     }
 
@@ -164,11 +179,11 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
       case UserSignUpError.PASSWORD_MISSING:
         return 'Enter your password';
       case UserSignUpError.PASSWORD_TOO_SHORT:
-        return 'Password is too short';
+        return `Password is too short. Must be at least ${LoginComponent.MIN_PASSWORD_LENGTH} characters.`;
       case UserSignUpError.USERNAME_MISSING:
         return 'Enter your username';
       case UserSignUpError.USERNAME_TOO_SHORT:
-        return 'Username is too short';
+        return `Username is too short. Must be at least ${LoginComponent.MIN_USERNAME_LENGTH} characters.`;
       case UserSignUpError.USER_EXISTS:
         return 'Username is not available. Please try a different username';
       case UserSignUpError.SERVER_ERROR:
@@ -181,19 +196,19 @@ class LoginComponent extends React.Component<ILoginProps, ILoginState> {
 
     if (!username || username.trim() === "") {
       validationErrors.push(UserSignUpError.USERNAME_MISSING)
-    } else if (username.length < 4) {
+    } else if (username.length < LoginComponent.MIN_USERNAME_LENGTH) {
       validationErrors.push(UserSignUpError.USERNAME_TOO_SHORT);
     }
 
     if (!email || email.trim() === "") {
       validationErrors.push(UserSignUpError.EMAIL_MISSING);
-    } else if (email.length < 4) { // TODO: Add email regex verification
+    } else if (email.length < LoginComponent.MIN_EMAIL_LENGTH) { // TODO: Add email regex verification
       validationErrors.push(UserSignUpError.INVALID_EMAIL);
     }
 
     if (!password || password.trim() === "") {
       validationErrors.push(UserSignUpError.PASSWORD_MISSING);
-    } else if (password.length < 6) {
+    } else if (password.length < LoginComponent.MIN_PASSWORD_LENGTH) {
       validationErrors.push(UserSignUpError.PASSWORD_TOO_SHORT);
     }
 

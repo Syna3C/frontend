@@ -3,6 +3,8 @@ import { combineEpics, createEpicMiddleware, Epic } from 'redux-observable';
 import { ajax } from 'rxjs/ajax';
 
 import { IState } from '../interfaces/IState';
+import { CommonEpics } from './common/CommonEpics';
+import { PersistenceHelper } from './PersistenceHelper';
 import { UserEpics } from './user/UserEpics';
 import { userReducer } from './user/UserReducer';
 import { DEFAULT_USER_STATE } from './user/UserTypes';
@@ -14,6 +16,7 @@ const DEFAULT_STATE: IState = {
 function configureStore(initialState: IState) {
   // configure middlewares
   const rootEpic = combineEpics(
+    CommonEpics.ALL as Epic<any>,
     UserEpics.ALL as Epic<any>
   );
 
@@ -46,4 +49,6 @@ function configureStore(initialState: IState) {
   return createdStore;
 }
 
-export const store = configureStore(DEFAULT_STATE);
+const storedState = PersistenceHelper.restoreState()
+
+export const store = configureStore(!!storedState ? storedState : DEFAULT_STATE);
